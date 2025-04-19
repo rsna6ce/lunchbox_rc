@@ -36,22 +36,41 @@
         <button onclick="sendParam('pwm_percent_R3')">Set</button>
     </div>
     <div>
-        <label>turn_percent_rate1:</label>
-        <input type="number" id="turn_percent_rate1" min="0" max="100" value="{{turn_percent_rate1}}">
-        <button onclick="sendParam('turn_percent_rate1')">Set</button>
+        <label>turn_percent_rate_I1:</label>
+        <input type="number" id="turn_percent_rate_I1" min="0" max="100" value="{{turn_percent_rate_I1}}">
+        <button onclick="sendParam('turn_percent_rate_I1')">Set</button>
     </div>
     <div>
-        <label>turn_percent_rate2:</label>
-        <input type="number" id="turn_percent_rate2" min="0" max="100" value="{{turn_percent_rate2}}">
-        <button onclick="sendParam('turn_percent_rate2')">Set</button>
+        <label>turn_percent_rate_O1:</label>
+        <input type="number" id="turn_percent_rate_O1" min="0" max="100" value="{{turn_percent_rate_O1}}">
+        <button onclick="sendParam('turn_percent_rate_O1')">Set</button>
     </div>
     <div>
-        <label>turn_percent_rate3:</label>
-        <input type="number" id="turn_percent_rate3" min="0" max="100" value="{{turn_percent_rate3}}">
-        <button onclick="sendParam('turn_percent_rate3')">Set</button>
+        <label>turn_percent_rate_I2:</label>
+        <input type="number" id="turn_percent_rate_I2" min="0" max="100" value="{{turn_percent_rate_I2}}">
+        <button onclick="sendParam('turn_percent_rate_I2')">Set</button>
+    </div>
+    <div>
+        <label>turn_percent_rate_O2:</label>
+        <input type="number" id="turn_percent_rate_O2" min="0" max="100" value="{{turn_percent_rate_O2}}">
+        <button onclick="sendParam('turn_percent_rate_O2')">Set</button>
+    </div>
+    <div>
+        <label>turn_percent_rate_I3:</label>
+        <input type="number" id="turn_percent_rate_I3" min="0" max="100" value="{{turn_percent_rate_I3}}">
+        <button onclick="sendParam('turn_percent_rate_I3')">Set</button>
+    </div>
+    <div>
+        <label>turn_percent_rate_O3:</label>
+        <input type="number" id="turn_percent_rate_O3" min="0" max="100" value="{{turn_percent_rate_O3}}">
+        <button onclick="sendParam('turn_percent_rate_O3')">Set</button>
     </div>
 
     <hr>
+
+    <details> 
+
+    <summary> (Wifi settings) </summary>
 
     <div>
         <label>SSID:</label>
@@ -63,6 +82,8 @@
         <input type="password" id="PASS" value="{{PASS}}">
         <button onclick="sendParam('PASS')">Set</button>
     </div>
+
+    </details>
 
     <script>
         function sendParam(paramName) {

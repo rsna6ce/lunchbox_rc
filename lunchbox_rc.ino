@@ -29,9 +29,12 @@ static int pwm_percent_L3 = 100;
 static int pwm_percent_R1 = 30;
 static int pwm_percent_R2 = 60;
 static int pwm_percent_R3 = 100;
-static int turn_percent_rate1 = 60;
-static int turn_percent_rate2 = 60;
-static int turn_percent_rate3 = 60;
+static int turn_percent_rate_I1 = 30;
+static int turn_percent_rate_I2 = 40;
+static int turn_percent_rate_I3 = 50;
+static int turn_percent_rate_O1 = 120;
+static int turn_percent_rate_O2 = 110;
+static int turn_percent_rate_O3 = 100;
 
 WebServer server(80);
 static String current_ipaddr = "";
@@ -237,17 +240,29 @@ void setup() {
         pwm_percent_R3 = config.read("pwm_percent_R3").toInt();
         Serial.println("config read pwm_percent_R3");
     }
-    if (config.exist("turn_percent_rate1")) {
-        turn_percent_rate1 = config.read("turn_percent_rate1").toInt();
-        Serial.println("config read turn_percent_rate1");
+    if (config.exist("turn_percent_rate_I1")) {
+        turn_percent_rate_I1 = config.read("turn_percent_rate_I1").toInt();
+        Serial.println("config read turn_percent_rate_I1");
     }
-    if (config.exist("turn_percent_rate2")) {
-        turn_percent_rate2 = config.read("turn_percent_rate2").toInt();
-        Serial.println("config read turn_percent_rate2");
+    if (config.exist("turn_percent_rate_I2")) {
+        turn_percent_rate_I2 = config.read("turn_percent_rate_I2").toInt();
+        Serial.println("config read turn_percent_rate_I2");
     }
-    if (config.exist("turn_percent_rate3")) {
-        turn_percent_rate3 = config.read("turn_percent_rate3").toInt();
-        Serial.println("config read turn_percent_rate3");
+    if (config.exist("turn_percent_rate_I3")) {
+        turn_percent_rate_I3 = config.read("turn_percent_rate_I3").toInt();
+        Serial.println("config read turn_percent_rate_I3");
+    }
+    if (config.exist("turn_percent_rate_O1")) {
+        turn_percent_rate_O1 = config.read("turn_percent_rate_O1").toInt();
+        Serial.println("config read turn_percent_rate_O1");
+    }
+    if (config.exist("turn_percent_rate_O2")) {
+        turn_percent_rate_O2 = config.read("turn_percent_rate_O2").toInt();
+        Serial.println("config read turn_percent_rate_O2");
+    }
+    if (config.exist("turn_percent_rate_O3")) {
+        turn_percent_rate_O3 = config.read("turn_percent_rate_O3").toInt();
+        Serial.println("config read turn_percent_rate_O3");
     }
     Serial.println("pwm_percent_L1:" + String(pwm_percent_L1));
     Serial.println("pwm_percent_L2:" + String(pwm_percent_L2));
@@ -255,9 +270,12 @@ void setup() {
     Serial.println("pwm_percent_R1:" + String(pwm_percent_R1));
     Serial.println("pwm_percent_R2:" + String(pwm_percent_R2));
     Serial.println("pwm_percent_R3:" + String(pwm_percent_R3));
-    Serial.println("turn_percent_rate1:" + String(turn_percent_rate1));
-    Serial.println("turn_percent_rate2:" + String(turn_percent_rate2));
-    Serial.println("turn_percent_rate3:" + String(turn_percent_rate3));
+    Serial.println("turn_percent_rate_I1:" + String(turn_percent_rate_I1));
+    Serial.println("turn_percent_rate_I2:" + String(turn_percent_rate_I2));
+    Serial.println("turn_percent_rate_I3:" + String(turn_percent_rate_I3));
+    Serial.println("turn_percent_rate_O1:" + String(turn_percent_rate_O1));
+    Serial.println("turn_percent_rate_O2:" + String(turn_percent_rate_O2));
+    Serial.println("turn_percent_rate_O3:" + String(turn_percent_rate_O3));
 
     server.on("/", handleRoot);
     server.on("/api",handleApi);
@@ -278,9 +296,12 @@ void handleRoot() {
     config_html.replace("{{pwm_percent_R1}}", String(pwm_percent_R1));
     config_html.replace("{{pwm_percent_R2}}", String(pwm_percent_R2));
     config_html.replace("{{pwm_percent_R3}}", String(pwm_percent_R3));
-    config_html.replace("{{turn_percent_rate1}}", String(turn_percent_rate1));
-    config_html.replace("{{turn_percent_rate2}}", String(turn_percent_rate2));
-    config_html.replace("{{turn_percent_rate3}}", String(turn_percent_rate3));
+    config_html.replace("{{turn_percent_rate_I1}}", String(turn_percent_rate_I1));
+    config_html.replace("{{turn_percent_rate_I2}}", String(turn_percent_rate_I2));
+    config_html.replace("{{turn_percent_rate_I3}}", String(turn_percent_rate_I3));
+    config_html.replace("{{turn_percent_rate_O1}}", String(turn_percent_rate_O1));
+    config_html.replace("{{turn_percent_rate_O2}}", String(turn_percent_rate_O2));
+    config_html.replace("{{turn_percent_rate_O3}}", String(turn_percent_rate_O3));
 
     SPIFFSIni config("/config.ini", true);
     config_html.replace("{{SSID}}", String(config.read("SSID")));
@@ -327,21 +348,36 @@ void handleApi() {
             res = "OK pwm_percent_R3[%] = " + String(pwm_percent_R3);
             config.write("pwm_percent_R3", String(pwm_percent_R3));
             Serial.println("config write pwm_percent_R3");
-        } else if (name_str == "turn_percent_rate1") {
-            turn_percent_rate1 = val_str.toInt();
-            res = "OK turn_percent_rate1[%] = " + String(turn_percent_rate1);
-            config.write("turn_percent_rate1", String(turn_percent_rate1));
-            Serial.println("config write turn_percent_rate1");
-        } else if (name_str == "turn_percent_rate2") {
-            turn_percent_rate2 = val_str.toInt();
-            res = "OK turn_percent_rate2[%] = " + String(turn_percent_rate2);
-            config.write("turn_percent_rate2", String(turn_percent_rate2));
-            Serial.println("config write turn_percent_rate2");
-        } else if (name_str == "turn_percent_rate3") {
-            turn_percent_rate3 = val_str.toInt();
-            res = "OK turn_percent_rate3[%] = " + String(turn_percent_rate3);
-            config.write("turn_percent_rate3", String(turn_percent_rate3));
-            Serial.println("config write turn_percent_rate3");
+        } else if (name_str == "turn_percent_rate_I1") {
+            turn_percent_rate_I1 = val_str.toInt();
+            res = "OK turn_percent_rate_I1[%] = " + String(turn_percent_rate_I1);
+            config.write("turn_percent_rate_I1", String(turn_percent_rate_I1));
+            Serial.println("config write turn_percent_rate_I1");
+        } else if (name_str == "turn_percent_rate_I2") {
+            turn_percent_rate_I2 = val_str.toInt();
+            res = "OK turn_percent_rate_I2[%] = " + String(turn_percent_rate_I2);
+            config.write("turn_percent_rate_I2", String(turn_percent_rate_I2));
+            Serial.println("config write turn_percent_rate_I2");
+        } else if (name_str == "turn_percent_rate_I3") {
+            turn_percent_rate_I3 = val_str.toInt();
+            res = "OK turn_percent_rate_I3[%] = " + String(turn_percent_rate_I3);
+            config.write("turn_percent_rate_I3", String(turn_percent_rate_I3));
+            Serial.println("config write turn_percent_rate_I3");
+        } else if (name_str == "turn_percent_rate_O1") {
+            turn_percent_rate_O1 = val_str.toInt();
+            res = "OK turn_percent_rate_O1[%] = " + String(turn_percent_rate_O1);
+            config.write("turn_percent_rate_O1", String(turn_percent_rate_O1));
+            Serial.println("config write turn_percent_rate_O1");
+        } else if (name_str == "turn_percent_rate_O2") {
+            turn_percent_rate_O2 = val_str.toInt();
+            res = "OK turn_percent_rate_O2[%] = " + String(turn_percent_rate_O2);
+            config.write("turn_percent_rate_O2", String(turn_percent_rate_O2));
+            Serial.println("config write turn_percent_rate_O2");
+        } else if (name_str == "turn_percent_rate_O3") {
+            turn_percent_rate_O3 = val_str.toInt();
+            res = "OK turn_percent_rate_O3[%] = " + String(turn_percent_rate_O3);
+            config.write("turn_percent_rate_O3", String(turn_percent_rate_O3));
+            Serial.println("config write turn_percent_rate_O3");
         } else if (name_str == "SSID") {
             res = "OK SSID = " + val_str;
             config.write("SSID", String(val_str));
@@ -381,35 +417,39 @@ void loop() {
     bool input_backward = MyconRecv.is_key_down(key_Downward) & (!input_forward);
     bool input_left = MyconRecv.is_key_down(key_Left) | MyconRecv.is_key_down(key_D);
     bool input_right = (MyconRecv.is_key_down(key_Right) | MyconRecv.is_key_down(key_A)) & (!input_left);
+    bool input_spin_left = MyconRecv.is_key_down(key_Left);
+    bool input_spin_right = MyconRecv.is_key_down(key_Right) & (!input_spin_left);;
 
     int speed_level = 0;
-    if (MyconRecv.is_key_down(key_L1)){ speed_level++; }
-    if (MyconRecv.is_key_down(key_L2)){ speed_level++; }
+    if (MyconRecv.is_key_down(key_L1) | MyconRecv.is_key_down(key_1)){ speed_level++; }
+    if (MyconRecv.is_key_down(key_L2) | MyconRecv.is_key_down(key_2)){ speed_level++; }
 
     //TODO: この下未実装
     const int pwm_percent_Ls[] = {pwm_percent_L1, pwm_percent_L2, pwm_percent_L3};
     const int pwm_percent_Rs[] = {pwm_percent_R1, pwm_percent_R2, pwm_percent_R3};
-    const int turn_percent_rates[] = {turn_percent_rate1, turn_percent_rate2, turn_percent_rate3};
+    const int turn_percent_rate_Is[] = {turn_percent_rate_I1, turn_percent_rate_I2, turn_percent_rate_I3};
+    const int turn_percent_rate_Os[] = {turn_percent_rate_O1, turn_percent_rate_O2, turn_percent_rate_O3};
     int pwm_percent_L = pwm_percent_Ls[speed_level];
     int pwm_percent_R = pwm_percent_Rs[speed_level];
-    int turn_percent_rate = turn_percent_rates[speed_level];
+    int turn_percent_rate_I = turn_percent_rate_Is[speed_level];
+    int turn_percent_rate_O = turn_percent_rate_Os[speed_level];
 
     // calc speed
     if (input_forward && input_left) {
         // forward turn left
         //Serial.println("forward turn left");
         motor_output(
-            pwm_percent_L * turn_percent_rate/100,
+            pwm_percent_L * turn_percent_rate_I/100,
             0,
-            pwm_percent_R,
+            pwm_percent_R * turn_percent_rate_O/100,
             0);
     } else if (input_forward && input_right) {
         // forward turn right
         //Serial.println("forward turn right");
         motor_output(
-            pwm_percent_L,
+            pwm_percent_L * turn_percent_rate_O/100,
             0,
-            pwm_percent_R * turn_percent_rate/100,
+            pwm_percent_R * turn_percent_rate_I/100,
             0);
     } else if (input_forward){
         // forward
@@ -424,17 +464,17 @@ void loop() {
         //Serial.println("backward turn left");
         motor_output(
             0,
-            pwm_percent_L * turn_percent_rate/100,
+            pwm_percent_L * turn_percent_rate_I/100,
             0,
-            pwm_percent_R);
+            pwm_percent_R * turn_percent_rate_O/100);
     } else if (input_backward && input_right) {
         // backwardturn right
         //Serial.println("backwardturn right");
         motor_output(
             0,
-            pwm_percent_L,
-            pwm_percent_R * turn_percent_rate/100,
-            0);
+            pwm_percent_L * turn_percent_rate_O/100,
+            0,
+            pwm_percent_R * turn_percent_rate_I/100);
     } else if (input_backward){
         // backward
         //Serial.println("backward");
@@ -443,7 +483,7 @@ void loop() {
             pwm_percent_L,
             0,
             pwm_percent_R);
-    } else if (input_left) {
+    } else if (input_spin_left) {
         // spin left
         //Serial.println("spin left");
         motor_output(
@@ -451,7 +491,7 @@ void loop() {
             pwm_percent_L,
             pwm_percent_R,
             0);
-    } else if (input_right) {
+    } else if (input_spin_right) {
         // spin right
         //Serial.println("spin right");
         motor_output(
