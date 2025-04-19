@@ -32,8 +32,8 @@ static int pwm_percent_R3 = 100;
 static int turn_percent_rate_I1 = 30;
 static int turn_percent_rate_I2 = 40;
 static int turn_percent_rate_I3 = 50;
-static int turn_percent_rate_O1 = 120;
-static int turn_percent_rate_O2 = 110;
+static int turn_percent_rate_O1 = 130;
+static int turn_percent_rate_O2 = 130;
 static int turn_percent_rate_O3 = 100;
 
 WebServer server(80);
